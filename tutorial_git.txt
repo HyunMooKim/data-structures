@@ -1,0 +1,30 @@
+순서:
+cd 파일경로
+git clone 깃허브주소
+cd 클론화된 파일경로
+git add 파일명
+git commit -m "add text file [tutorial.txt]"
+git push 
+
+예시
+C:\Users\MOO>cd C:\Users\MOO\Desktop\data_structure
+
+C:\Users\MOO\Desktop\data_structure>git clone https://github.com/HyunMooKim/data-stuctures-.git
+Cloning into 'data-stuctures-'...
+warning: You appear to have cloned an empty repository.
+
+C:\Users\MOO\Desktop\data_structure>cd data-structures-
+지정된 경로를 찾을 수 없습니다.
+
+C:\Users\MOO\Desktop\data_structure>cd data-stuctures-
+
+C:\Users\MOO\Desktop\data_structure\data-stuctures->git add tutorial.txt
+
+C:\Users\MOO\Desktop\data_structure\data-stuctures->git commit -m "add text file [tutorial.txt]
+[main (root-commit) e216ab2] add text file [tutorial.txt]
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 tutorial.txt
+
+C:\Users\MOO\Desktop\data_structure\data-stuctures->git push
+
+끝
