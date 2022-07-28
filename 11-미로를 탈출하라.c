@@ -1,9 +1,9 @@
-//c·Î ¹è¿ì´Â ½¬¿î ÀÚ·á±¸Á¶ (ÀÌÁö¿µ) 4ÆÇ
-//ÀÀ¿ë¿¹Á¦ 11 - ¹Ì·Î¸¦ Å»ÃâÇÏ¶ó!
-//³­ÀÌµµ: Áß~»ó
-//BFS¶ó´Â ÈùÆ®°¡ ¾ø¾ú´Ù¸é Ç® ¼ö ÀÖ¾úÀ»±î..? 
-/*
-ÀÔ·Â¿¹½Ã
+//cë¡œ ë°°ìš°ëŠ” ì‰¬ìš´ ìžë£Œêµ¬ì¡° (ì´ì§€ì˜) 4íŒ
+//ì‘ìš©ì˜ˆì œ 11 - ë¯¸ë¡œë¥¼ íƒˆì¶œí•˜ë¼!
+//ë‚œì´ë„: ì¤‘~ìƒ
+//BFSë¼ëŠ” ížŒíŠ¸ê°€ ì—†ì—ˆë‹¤ë©´ í’€ ìˆ˜ ìžˆì—ˆì„ê¹Œ..? 
+/*  0ì€ ì´ë™ ê°€ëŠ¥, 1 ì€ ë²½ì´ë‹¤.  ì‹œìž‘ì ë¶€í„° n,nì˜ ëì ê¹Œì§€ ê²½ë¡œë¥¼ ì¶œë ¥í•˜ëŠ” ë¬¸ì œ. 
+ìž…ë ¥ì˜ˆì‹œ
 5
 0 1 1 0 1
 0 0 0 1 1
@@ -11,11 +11,11 @@
 0 0 0 1 1
 0 0 0 0 0
 
-Ãâ·Â¿¹½Ã
+ì¶œë ¥ì˜ˆì‹œ
 (1, 1)  (2, 1)  (2, 2)  (2, 3)  (3, 3)  (4, 3)  (5, 3)  (5, 4)  (5, 5)
 
 
-ÀÔ·Â¿¹½Ã2
+ìž…ë ¥ì˜ˆì‹œ2
 6
 0 0 0 0 0 0
 0 1 1 1 1 0
@@ -23,7 +23,7 @@
 0 1 0 1 0 1
 0 1 0 1 1 1
 0 1 0 0 0 0
-Ãâ·Â¿¹½Ã2
+ì¶œë ¥ì˜ˆì‹œ2
 (1, 1)  (2, 1)  (3, 1)  (3, 2)  (3, 3)  (4, 3)  (5, 3)  (6, 3)  (6, 4)  (6, 5)  (6, 6)
 */
 #include <stdio.h>
@@ -35,24 +35,24 @@ typedef struct locat {
     int x;
     int y;
 }locat;
-//BFS Å½»ö¿ë Å¥
+//BFS íƒìƒ‰ìš© í
 int rear = -1, front = -1;
 locat* queue[MAX];
-//¹Ì·Î
+//ë¯¸ë¡œ
 int maze[max][max];
-//¹æ¹®¿©ºÎ È®ÀÎ
+//ë°©ë¬¸ì—¬ë¶€ í™•ì¸
 int visited[max][max];
-//°¢ À§Ä¡±îÁö ¾ó¸¶³ª ÀÌµ¿Çß´ÂÁö È®ÀÎ
+//ê° ìœ„ì¹˜ê¹Œì§€ ì–¼ë§ˆë‚˜ ì´ë™í–ˆëŠ”ì§€ í™•ì¸
 int path[max][max];
-//°æ·Î ÀúÀå¿ë ½ºÅÃ
+//ê²½ë¡œ ì €ìž¥ìš© ìŠ¤íƒ
 int top = -1;
 locat* stack[MAX];
 
-//´ÙÀ½ À§Ä¡¸¦ ¹ÝÈ¯ÇØÁÖ´Â ÇÔ¼ö
+//ë‹¤ìŒ ìœ„ì¹˜ë¥¼ ë°˜í™˜í•´ì£¼ëŠ” í•¨ìˆ˜
 locat* next_adjacent(locat* now, int n) {
     locat* next = (locat*)malloc(sizeof(locat));
-    //ÁÂÇ¥°¡ 0°ú n-1 »çÀÌÀÌ¸ç, ÇöÀç À§Ä¡¿Í ÀÎÁ¢ÇÏ°í, º®ÀÌ ¾Æ´Ï¸ç, ¹æ¹®ÇÑÀû ¾øÀ¸¸é ´ÙÀ½ Å½»ö ´ë»ó
-    //¾Æ·¡
+    //ì¢Œí‘œê°€ 0ê³¼ n-1 ì‚¬ì´ì´ë©°, í˜„ìž¬ ìœ„ì¹˜ì™€ ì¸ì ‘í•˜ê³ , ë²½ì´ ì•„ë‹ˆë©°, ë°©ë¬¸í•œì  ì—†ìœ¼ë©´ ë‹¤ìŒ íƒìƒ‰ ëŒ€ìƒ
+    //ì•„ëž˜
     if (now->x + 1 <= n - 1) {
         if ((maze[now->x + 1][now->y] == 0) && visited[now->x + 1][now->y] == 0) {
             next->x = now->x + 1;
@@ -60,7 +60,7 @@ locat* next_adjacent(locat* now, int n) {
             return next;
         }
     }
-    //À§
+    //ìœ„
     if (0 <= now->x - 1) {
         if ((maze[now->x - 1][now->y] == 0) && visited[now->x - 1][now->y] == 0) {
             next->x = now->x - 1;
@@ -68,7 +68,7 @@ locat* next_adjacent(locat* now, int n) {
             return next;
         }
     }
-    //¿À¸¥ÂÊ
+    //ì˜¤ë¥¸ìª½
     if (now->y + 1 <= n - 1) {
         if ((maze[now->x][now->y + 1] == 0) && visited[now->x][now->y + 1] == 0) {
             next->x = now->x;
@@ -76,7 +76,7 @@ locat* next_adjacent(locat* now, int n) {
             return next;
         }
     }
-    //¿ÞÂÊ
+    //ì™¼ìª½
     if (0 <= now->y - 1) {
         if ((maze[now->x][now->y - 1] == 0) && visited[now->x][now->y - 1] == 0) {
             next->x = now->x;
@@ -85,7 +85,7 @@ locat* next_adjacent(locat* now, int n) {
         }
     }
 
-    //´õÀÌ»ó ¹æ¹®ÇÒ ÀÎÁ¢ ³ëµå°¡ ¾øÀ¸¸é
+    //ë”ì´ìƒ ë°©ë¬¸í•  ì¸ì ‘ ë…¸ë“œê°€ ì—†ìœ¼ë©´
     return NULL;
 }
 
@@ -102,7 +102,7 @@ locat* dequeue() {
 
 int BFS_to_exit(int n) {
     locat* now = (locat*)malloc(sizeof(locat));
-    now->x = 0; //Ãâ·ÂÇÒ¶§´Â 1,1 ·Î Ãâ·Â
+    now->x = 0; //ì¶œë ¥í• ë•ŒëŠ” 1,1 ë¡œ ì¶œë ¥
     now->y = 0;
 
     enqueue(now);
@@ -110,16 +110,16 @@ int BFS_to_exit(int n) {
     path[0][0] = 0;
 
     locat* next = now;
-    //BFS ÁøÇà
+    //BFS ì§„í–‰
     while (front != rear) {
         now = dequeue();
-        //ÇöÀç º¸°í ÀÖ´Â locatÀÇ ÁÖº¯À» ÀüºÎ enqueue
+        //í˜„ìž¬ ë³´ê³  ìžˆëŠ” locatì˜ ì£¼ë³€ì„ ì „ë¶€ enqueue
         for (next = next_adjacent(now, n); next; next = next_adjacent(now, n)) {
             enqueue(next);
             visited[(next->x)][(next->y)] = 1;
-            //Àü ´Ü°èÀÇ °Å¸®¿¡ 1¸¸Å­ ´õÇÑ °Å¸®¸¦ ±â·ÏÇØÁØ´Ù.
+            //ì „ ë‹¨ê³„ì˜ ê±°ë¦¬ì— 1ë§Œí¼ ë”í•œ ê±°ë¦¬ë¥¼ ê¸°ë¡í•´ì¤€ë‹¤.
             path[(next->x)][(next->y)] = path[now->x][now->y] + 1;
-            //Ãâ±¸(n-1, n-1)¿¡ µµ´ÞÇÏ¸é stop
+            //ì¶œêµ¬(n-1, n-1)ì— ë„ë‹¬í•˜ë©´ stop
             if (next->x == n - 1 && next->y == n - 1) {
                 return path[next->x][next->y];
             }
@@ -145,8 +145,8 @@ locat* pop() {
 
 void back_track(int totalpath, int n) {
     locat* temp = (locat*)malloc(sizeof(locat));
-    //½ÃÀÛÁ¡±îÁö °Å²Ù·Î °Å½½·¯ ¿Ã¶ó°¡¸ç ½ºÅÃ¿¡ ÀúÀå
-    //°Å¸® 8->7->6->5->...... ÀÌ·±½ÄÀ¸·Î 
+    //ì‹œìž‘ì ê¹Œì§€ ê±°ê¾¸ë¡œ ê±°ìŠ¬ëŸ¬ ì˜¬ë¼ê°€ë©° ìŠ¤íƒì— ì €ìž¥
+    //ê±°ë¦¬ 8->7->6->5->...... ì´ëŸ°ì‹ìœ¼ë¡œ 
     temp->x = n - 1;
     temp->y = n - 1;
     push(temp->x,temp->y);
@@ -154,31 +154,31 @@ void back_track(int totalpath, int n) {
     while ( temp->x != 0 || temp->y != 0) {
 
         totalpath--;
-        //push(temp) Çß´Âµ¥, tempÁÖ¼Ò¸¦ ÀÌ ÇÔ¼ö ¾È¿¡¼­ ¸¸µé¾î¼­ ÀüºÎ ¸¶Áö¸· ÀúÀå°ªÀÎ (0,0)ÀÌ µÇ¾î¹ö·È´Ù. 
-        // -> ÇØ°á: push¿¡¼­ ÁÖ¼Ò¸¦ ¸¸µéµµ·Ï ¹Ù²Þ.
-        //À§¾Æ·¡ ¾ç¿· ³¢¸® if elseºÙ¿´´Ù°¡ µð¹ö±×ÇÔ. ¿¹¸¦µé¾î x+1ÀÌ ¹üÀ§ ¾È¿¡´Â µéÁö¸¸, º®ÀÎ°æ¿ì ¹Ø¿¡°¡ else if ¸é ´Ù Áö³ª°¡¹ö¸²
-        //¾Æ·¡ 
+        //push(temp) í–ˆëŠ”ë°, tempì£¼ì†Œë¥¼ ì´ í•¨ìˆ˜ ì•ˆì—ì„œ ë§Œë“¤ì–´ì„œ ì „ë¶€ ë§ˆì§€ë§‰ ì €ìž¥ê°’ì¸ (0,0)ì´ ë˜ì–´ë²„ë ¸ë‹¤. 
+        // -> í•´ê²°: pushì—ì„œ ì£¼ì†Œë¥¼ ë§Œë“¤ë„ë¡ ë°”ê¿ˆ.
+        //ìœ„ì•„ëž˜ ì–‘ì˜† ë¼ë¦¬ if elseë¶™ì˜€ë‹¤ê°€ ë””ë²„ê·¸í•¨. ì˜ˆë¥¼ë“¤ì–´ x+1ì´ ë²”ìœ„ ì•ˆì—ëŠ” ë“¤ì§€ë§Œ, ë²½ì¸ê²½ìš° ë°‘ì—ê°€ else if ë©´ ë‹¤ ì§€ë‚˜ê°€ë²„ë¦¼
+        //ì•„ëž˜ 
         if (temp->x + 1 <= n - 1) {
             if ((maze[temp->x+1][temp->y] == 0) && (path[temp->x+1][temp->y] == totalpath)) {
                 temp->x = temp->x + 1;
                 push(temp->x, temp->y);
             }
         }
-        //À§
+        //ìœ„
         if (0 <= temp->x -1) {
             if ((maze[temp->x -1][temp->y] == 0) && path[temp->x -1][temp->y] ==totalpath ) {
                 temp->x = temp->x - 1;
                 push(temp->x, temp->y);
             }
         }
-        //¿À¸¥ÂÊ
+        //ì˜¤ë¥¸ìª½
         if (temp->y + 1 <= n - 1) {
             if ((maze[temp->x][temp->y + 1] == 0) && path[temp->x][temp->y + 1] == totalpath) {
                 temp->y = temp->y + 1;
                 push(temp->x, temp->y);
             }
         }
-        //¿ÞÂÊ
+        //ì™¼ìª½
         if (0 <= temp->y - 1) {
             if ((maze[temp->x][temp->y - 1] == 0) && path[temp->x][temp->y - 1] == totalpath) {
                 temp->y = temp->y - 1;
