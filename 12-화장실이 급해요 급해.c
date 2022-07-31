@@ -1,29 +1,44 @@
-//c·Î ¹è¿ì´Â ½¬¿î ÀÚ·á±¸Á¶ (ÀÌÁö¿µ) 4ÆÇ
-//ÀÀ¿ë¿¹Á¦ 12 - È­Àå½ÇÀÌ ±ÞÇØ¿ä, ±ÞÇØ!
-//³­ÀÌµµ: Áß
+//cë¡œ ë°°ìš°ëŠ” ì‰¬ìš´ ìžë£Œêµ¬ì¡° (ì´ì§€ì˜) 4íŒ
+//ì‘ìš©ì˜ˆì œ 12 - í™”ìž¥ì‹¤ì´ ê¸‰í•´ìš”, ê¸‰í•´!
+//ë‚œì´ë„: ì¤‘
+/*
+ìž…ë ¥ì˜ˆì‹œ
+6 7
+1 2
+1 3
+1 4
+2 4
+3 4
+4 5
+5 6
+ì¶œë ¥
+(1,4)
+(4,5)
+(5,6)
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #define max 50
 #define INF 51
-//´ÙÀÍ½ºÆ®¶ó ¾Ë°í¸®ÁòÀ» À§ÇÑ distance¹è¿­, °£¼± ¹è¿­ weight, ¹æ¹®¿©ºÎ È®ÀÎ ÁýÇÕ s
+//ë‹¤ìµìŠ¤íŠ¸ë¼ ì•Œê³ ë¦¬ì¦˜ì„ ìœ„í•œ distanceë°°ì—´, ê°„ì„  ë°°ì—´ weight, ë°©ë¬¸ì—¬ë¶€ í™•ì¸ ì§‘í•© s
 int distance[max];
 int s[max];
 int weight[max][max];
 
-//°æ·Î °»½ÅÀ» ±â·ÏÇÏ±â À§ÇÑ ¹è¿­
+//ê²½ë¡œ ê°±ì‹ ì„ ê¸°ë¡í•˜ê¸° ìœ„í•œ ë°°ì—´
 int record[max] = { 0 };
 
-//°æ·Î ÀúÀå¿ë ½ºÅÃ
+//ê²½ë¡œ ì €ìž¥ìš© ìŠ¤íƒ
 typedef struct path {
     int from;
     int to;
 }path;
 
 typedef struct stack {
-    path* stack[max]; //¹ÝÈ¯°ªÀÌ µÎ°³´Ï ÁÖ¼ÒÀÌ¿ë
+    path* stack[max]; //ë°˜í™˜ê°’ì´ ë‘ê°œë‹ˆ ì£¼ì†Œì´ìš©
     int top;
 }stack;
-//½ºÅÃ »ý¼º
+//ìŠ¤íƒ ìƒì„±
 stack* create_stack() {
     stack* s = (stack*)malloc(sizeof(stack));
     s->top = -1;
@@ -39,7 +54,7 @@ void push(stack* s, int from, int to) {
         return;
     }//overflow 
     s->top++;
-    /* ¿¹¿Ü¹ß»ý!
+    /* ì˜ˆì™¸ë°œìƒ!
     (s->stack[s->top])->from = from;
     (s->stack[s->top])->to = to;
     */
@@ -71,7 +86,7 @@ int next_vertex(int n) {
 }
 
 void dijkstra(int start, int n) {
-    //ÃÊ±âÈ­ ÀÛ¾÷ ¹× ½ÃÀÛÁ¡ ¹æ¹® 
+    //ì´ˆê¸°í™” ìž‘ì—… ë° ì‹œìž‘ì  ë°©ë¬¸ 
     for (int i = 0; i < n; i++) {
         distance[i] = weight[start][i];
         s[i] = 0;
@@ -79,14 +94,14 @@ void dijkstra(int start, int n) {
 
     s[start] = 1;
     distance[start] = 0;
-    for (int i = 0; i < n - 1; i++) { //¸¶Áö¸·Àº ±×³É Á¤ÇØÁö´Ï n-1¹ø ¼öÇà
+    for (int i = 0; i < n - 1; i++) { //ë§ˆì§€ë§‰ì€ ê·¸ëƒ¥ ì •í•´ì§€ë‹ˆ n-1ë²ˆ ìˆ˜í–‰
         int u = next_vertex(n);
         s[u] = 1;
         for (int w = 0; w < n; w++) {
             if (s[w] == 0) {
                 if (distance[w] > distance[u] + weight[u][w]) {
                     distance[w] = distance[u] + weight[u][w];
-                    //°»½Å µÉ¶§¸¶´Ù ¾îµð¸¦ °ÅÃÄ¼­ °¡´Â°É·Î °»½ÅµÇ¾ú´ÂÁö ±â·Ï
+                    //ê°±ì‹  ë ë•Œë§ˆë‹¤ ì–´ë””ë¥¼ ê±°ì³ì„œ ê°€ëŠ”ê±¸ë¡œ ê°±ì‹ ë˜ì—ˆëŠ”ì§€ ê¸°ë¡
                     record[w] = u;
                 }
             }
@@ -105,28 +120,28 @@ int main()
     path* p = NULL;
     stack* s = create_stack();
 
-    //ÃÑ À§Ä¡ °³¼ö¿Í °£¼± °³¼ö
+    //ì´ ìœ„ì¹˜ ê°œìˆ˜ì™€ ê°„ì„  ê°œìˆ˜
     scanf("%d %d", &n, &m);
 
-    //¿ì¼± ±×·¡ÇÁ Á¤Á¡ ¼­·Î°£ÀÇ ¿¬°áÀ» ÃÊ±âÈ­
+    //ìš°ì„  ê·¸ëž˜í”„ ì •ì  ì„œë¡œê°„ì˜ ì—°ê²°ì„ ì´ˆê¸°í™”
     for (int k = 0; k < n; k++) {
         for (int l = 0; l < n; l++) {
             if (k != l) weight[k][l] = INF;
             else weight[k][l] = 0;
         }
     }
-    //±×·¡ÇÁ °£¼± ÀÔ·Â¹Þ±â
+    //ê·¸ëž˜í”„ ê°„ì„  ìž…ë ¥ë°›ê¸°
     for (int k = 0; k < m; k++) {
         scanf("%d %d", &i, &j);
-        weight[i-1][j-1] = 1;   //½ÇÁ¦ index´Â 1->0 À¸·Î -1¾¿ ÇØÁØ´Ù. 
+        weight[i-1][j-1] = 1;   //ì‹¤ì œ indexëŠ” 1->0 ìœ¼ë¡œ -1ì”© í•´ì¤€ë‹¤. 
     }
 
-    //ÇöÀç À§Ä¡ 1 (index»óÀ¸·Î´Â 0), È­Àå½Ç À§Ä¡ n -> ÀÌ°Ç ÇÔ¼ö¿¡¼­ ±×³É n-1±îÁö·Î Ã³¸®ÇÔ
+    //í˜„ìž¬ ìœ„ì¹˜ 1 (indexìƒìœ¼ë¡œëŠ” 0), í™”ìž¥ì‹¤ ìœ„ì¹˜ n -> ì´ê±´ í•¨ìˆ˜ì—ì„œ ê·¸ëƒ¥ n-1ê¹Œì§€ë¡œ ì²˜ë¦¬í•¨
     dijkstra(0, n);
     
 
     for (i = n - 1; i != 0; i = record[i] ) {
-        //¸ñÇ¥Á¡ºÎÅÍ  (°ÅÃÄ°¡´Â ÁöÁ¡, ÇØ´çÁöÁ¡) À» ¹Ýº¹ push
+        //ëª©í‘œì ë¶€í„°  (ê±°ì³ê°€ëŠ” ì§€ì , í•´ë‹¹ì§€ì ) ì„ ë°˜ë³µ push
         push(s, record[i], i);        
     }
 
